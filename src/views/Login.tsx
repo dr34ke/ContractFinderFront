@@ -2,10 +2,12 @@ import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import Input from "../components/input";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { showMessage } from "react-native-flash-message";
 import { Post } from "../api/apiService";
 import OwnButton from "../components/ownButton";
+import { getToken, storeToken } from "../helpers/TokenHelper";
+import UserStore from "../stores/userStore";
 
 const EMPTY_USER: User = {
   email: "",
@@ -15,6 +17,10 @@ const EMPTY_USER: User = {
 export default function Login() {
   const [user, setUser] = useState<User>(EMPTY_USER);
 
+  const loginState = UserStore((s) => s.loginState);
+  const loginResponse = UserStore((s) => s.loginResponse);
+  const initializeUser = UserStore((s) => s.initializeUser);
+
   const onChangeEmail = (e: string) => {
     setUser({ ...user, email: e });
   };
@@ -23,23 +29,33 @@ export default function Login() {
   };
 
   const login = async () => {
-    try {
-      await Post<User>(user, "/user/login", false);
+    await initializeUser(user.email, user.password);
+    showMessage({
+      message: "",
+      type: "danger",
+      duration: 5000,
+      icon: "danger",
+    });
+  };
+
+  useEffect(() => {
+    if (loginState === "error") {
+      showMessage({
+        message: loginResponse,
+        type: "danger",
+        duration: 5000,
+        icon: "success",
+      });
+    }
+    else if(loginState==="success"){
       showMessage({
         message: "Zalogowano",
         type: "success",
         duration: 5000,
-      });
-    } catch (ex) {
-      const json = JSON.parse(ex as string);
-      showMessage({
-        message: json.error as string,
-        type: "danger",
-        duration: 5000,
         icon: "danger",
-      });
+      })
     }
-  };
+  }, [loginState]);
 
   return (
     <View style={styles.container}>
