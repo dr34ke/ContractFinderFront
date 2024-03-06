@@ -13,8 +13,9 @@ import { useRef, useState } from "react";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { NavigatorProps } from "../navigation/appNavigation";
+import { NavigatorBFProps } from "../navigation/appNavigation";
 import OwnButton from "../components/ownButton";
+import React from "react";
 
 const EMPTY_USER: User = {
   firstName: "",
@@ -27,10 +28,8 @@ const EMPTY_USER: User = {
 export default function Register() {
   const [user, setUser] = useState<User>(EMPTY_USER);
 
-  const navigation = useNavigation<NativeStackNavigationProp<NavigatorProps>>();
-
-  const messageRef = useRef();
-
+  const navigation = useNavigation<NativeStackNavigationProp<NavigatorBFProps>>();
+  
   const onChangeFName = (e: string) => {
     setUser({ ...user, firstName: e });
   };
@@ -75,28 +74,33 @@ export default function Register() {
           kbType="email-address"
           value={user.email}
           onChange={onChangeEmail}
+          iconName="mail-outline"
         />
         <Input
           onChange={onChangePassword}
           placeHolder="Hasło"
           value={user.password!}
           secure={true}
+          iconName="finger-print-outline"
         />
         <Input
           placeHolder="Imie"
           value={user.firstName!}
           onChange={onChangeFName}
+          iconName="person-outline"
         />
         <Input
           placeHolder="Nazwisko"
           value={user.lastName!}
           onChange={onChangeLName}
+          iconName="person-outline"
         />
         <Input
           placeHolder="Telefon"
           kbType="phone-pad"
           value={user.phone!}
           onChange={onChangePhone}
+          iconName="call-outline"
         />
         <OwnButton title="Zarejestruj się" onPress={register}/>
       </View>

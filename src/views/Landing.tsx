@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NavigatorBFProps } from "../navigation/appNavigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
 
 export default function Landing() {
   const navigation = useNavigation<NativeStackNavigationProp<NavigatorBFProps>>();

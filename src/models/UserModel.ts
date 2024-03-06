@@ -17,7 +17,7 @@ interface UserProfile {
 interface UserPreference {
   isPhonePublic?: boolean;
   isEmailPublic?: boolean;
-  userType?: string;
+  userType?: "worker"|"employer";
   workDistance?: number;
   timeStamp?: TimeStamp;
 }

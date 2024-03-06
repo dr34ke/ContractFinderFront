@@ -18,6 +18,10 @@ interface UserStore {
 
   profileState: "loading" | "idle" | "success" | "error";
   profileResponse: string;
+
+  preferenceState: "loading" | "idle" | "success" | "error";
+  preferenceResponse: string;
+  unsetSettings:()=>Promise<void>;
 }
 
 const EMPTY_USER: User = {
@@ -39,7 +43,15 @@ const UserStore = create<UserStore>()((set, get) => ({
   profileState: "idle",
   profileResponse: "",
 
+  preferenceState: "idle",
+  preferenceResponse: "",
+
+  unsetSettings: async()=>{
+    set({userPreferenceInitialized:false, userProfileInitialized:false})
+  },
+
   initializeUser: async (email: string, password: string) => {
+    set({loginState:"loading"})
     if (!get().userInitialized) {
       let _usr: User = {
         email: email,
@@ -62,9 +74,7 @@ const UserStore = create<UserStore>()((set, get) => ({
   initializeUserProfile: async () => {
     if (!get().userProfileInitialized) {
         try {
-            console.log("/user/get-profile/"+get().user.id);
             var response = await Get<UserProfile>("/user/get-profile/"+get().user.id, true);
-            console.log(response);
             try {
               set({ userProfile: response, profileState: "success", userProfileInitialized: true });
             } catch (ex) {
@@ -76,6 +86,20 @@ const UserStore = create<UserStore>()((set, get) => ({
           }
     }
   },
-  initializeUserPreference: async () => {},
+  initializeUserPreference: async () => {
+    if (!get().userPreferenceInitialized) {
+      try {
+          var response = await Get<UserProfile>("/user/get-preference/"+get().user.id, true);
+          try {
+            set({ userPreference: response, preferenceState: "success", userPreferenceInitialized: true });
+          } catch (ex) {
+            set({ preferenceState: "error", preferenceResponse: "Błąd pobierania ustawień" });
+          }
+        } catch (ex) {
+          const json = JSON.parse(ex as string);
+          set({ preferenceState: "error", preferenceResponse: json as string });
+        }
+  }
+  },
 }));
 export default UserStore;

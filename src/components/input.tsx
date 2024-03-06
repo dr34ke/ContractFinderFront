@@ -1,32 +1,64 @@
 import { useState } from "react";
-import { KeyboardTypeOptions, SafeAreaView, StyleSheet, TextInput } from "react-native";
+import React from "react";
+import {
+  KeyboardTypeOptions,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 interface Props {
-    value :string
-    onChange : ((text:string)=>void)
+  value: string;
+  onChange: (text: string) => void;
   placeHolder: string;
-  kbType?: KeyboardTypeOptions
-  secure?:boolean 
+  kbType?: KeyboardTypeOptions;
+  secure?: boolean;
+  iconName:string
 }
 
-export default function Input({ value, onChange, placeHolder, kbType=undefined, secure=false}: Props) {
+export default function Input({
+  value,
+  onChange,
+  placeHolder,
+  kbType = undefined,
+  secure = false,
+  iconName
+}: Props) {
   return (
-    <TextInput
-      style={styles.input}
-      onChangeText={onChange}
-      value={value}
-      placeholder={placeHolder}
-      keyboardType={kbType}
-      secureTextEntry={secure}
-    />
+    <View style={styles.searchSection}>
+      <Ionicons name={iconName} style={styles.searchIcon}/>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChange}
+        value={value}
+        placeholder={placeHolder}
+        keyboardType={kbType}
+        secureTextEntry={secure}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  searchSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  searchIcon: {
+    padding: 10,
+    fontSize:20
+  },
   input: {
     height: 40,
     margin: 3,
-    borderWidth: 0.3,
-    padding: 10,
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
   },
 });

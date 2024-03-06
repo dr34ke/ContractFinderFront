@@ -8,6 +8,7 @@ import { Post } from "../api/apiService";
 import OwnButton from "../components/ownButton";
 import { getToken, storeToken } from "../helpers/TokenHelper";
 import UserStore from "../stores/userStore";
+import React from "react";
 
 const EMPTY_USER: User = {
   email: "",
@@ -30,16 +31,17 @@ export default function Login() {
 
   const login = async () => {
     await initializeUser(user.email, user.password);
-    showMessage({
+    /*showMessage({
       message: "",
       type: "danger",
       duration: 5000,
       icon: "danger",
-    });
+    });*/
   };
 
   useEffect(() => {
     if (loginState === "error") {
+      console.log(loginResponse)
       showMessage({
         message: loginResponse,
         type: "danger",
@@ -66,12 +68,14 @@ export default function Login() {
           kbType="email-address"
           value={user.email}
           onChange={onChangeEmail}
+          iconName="log-in-outline"
         />
         <Input
           onChange={onChangePassword}
           placeHolder="Hasło"
           value={user.password}
           secure={true}
+          iconName="finger-print-outline"
         />
         <OwnButton title="Zaloguj się" onPress={login} />
       </View>

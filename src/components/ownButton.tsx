@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { KeyboardTypeOptions, Pressable, Text, StyleSheet } from "react-native";
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'black',
-    width:"50%",
+    width:"45%",
     padding: 10,
     margin: 10,
   },
