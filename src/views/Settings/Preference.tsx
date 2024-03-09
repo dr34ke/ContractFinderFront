@@ -1,15 +1,15 @@
 import { Switch, View, Text, StyleSheet } from "react-native";
-import UserStore from "../stores/userStore";
+import UserStore from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import { showMessage } from "react-native-flash-message";
-import OwnSwitch from "../components/ownSwitch";
-import OwnSelect from "../components/ownSelect";
-import OwnNumberInput from "../components/ownNumberInput";
+import OwnSwitch from "../../components/ownSwitch";
+import OwnSelect from "../../components/ownSelect";
+import OwnNumberInput from "../../components/ownNumberInput";
 import React from "react";
-import OwnButton from "../components/ownButton";
-import { Post } from "../api/apiService";
+import OwnButton from "../../components/ownButton";
+import { Post } from "../../api/apiService";
 import { useNavigation } from "@react-navigation/native";
-import { NavigatorAFProps } from "../navigation/appNavigation";
+import { NavigatorAFProps } from "../../navigation/appNavigation";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 
 export default function Preference() {

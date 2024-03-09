@@ -31,12 +31,6 @@ export default function Login() {
 
   const login = async () => {
     await initializeUser(user.email, user.password);
-    /*showMessage({
-      message: "",
-      type: "danger",
-      duration: 5000,
-      icon: "danger",
-    });*/
   };
 
   useEffect(() => {

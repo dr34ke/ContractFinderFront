@@ -11,9 +11,9 @@ import FlashMessage from "react-native-flash-message";
 import { StatusBar } from "expo-status-bar";
 import UserStore from "../stores/userStore";
 import Landing from "../views/Landing";
-import Home from "../views/Home";
-import Profile from "../views/Profile";
-import Preference from "../views/Preference";
+import Home from "../views/Offers/Offers";
+import Profile from "../views/Settings/Profile";
+import Preference from "../views/Settings/Preference";
 import { TouchableOpacity, View, Text } from "react-native";
 
 export type NavigatorBFProps = {

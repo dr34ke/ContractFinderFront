@@ -7,13 +7,13 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import UserStore from "../stores/userStore";
+import UserStore from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import { showMessage } from "react-native-flash-message";
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
-import OwnButton from "../components/ownButton";
-import { Post } from "../api/apiService";
+import OwnButton from "../../components/ownButton";
+import { Post } from "../../api/apiService";
 
 export default function Profile() {
   const profile = UserStore((s) => s.userProfile);
