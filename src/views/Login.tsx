@@ -35,7 +35,6 @@ export default function Login() {
 
   useEffect(() => {
     if (loginState === "error") {
-      console.log(loginResponse)
       showMessage({
         message: loginResponse,
         type: "danger",

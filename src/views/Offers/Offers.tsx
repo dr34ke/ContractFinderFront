@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import UserStore from "../../stores/userStore";
-import { View, Text } from "react-native";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import { NavigatorAFProps } from "../../navigation/appNavigation";
 import {
   NativeStackNavigationProp,
@@ -9,10 +8,12 @@ import {
 } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Map from "./MapView";
-import ListView from "./ListView";
 import CategoriesView from "./CategoriesView";
+import OffersView from "./OffersView";
+
+export type NavigatorOffersProps = {
+  Oferty: any;
+};
 
 export default function Offers() {
   const profile = UserStore((s) => s.userProfile);
@@ -23,10 +24,9 @@ export default function Offers() {
   const preferenceState = UserStore((s) => s.preferenceState);
   const initPreference = UserStore((s) => s.initializeUserPreference);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<NavigatorAFProps>>();
+  const navi = useNavigation<NativeStackNavigationProp<NavigatorAFProps>>();
 
-  const Tab = createBottomTabNavigator();
+
   const Categories = createNativeStackNavigator();
 
   useEffect(() => {
@@ -46,33 +46,21 @@ export default function Offers() {
 
   useEffect(() => {
     if (preferenceState === "success" && profileState === "success") {
-      console.log(preference.timeStamp);
       if (preference.timeStamp?.updatedAt === undefined) {
-        navigation.navigate("Preference");
+        navi.navigate("Preference");
       }
       if (profile.timeStamp?.updatedAt === undefined) {
-        navigation.navigate("Profile");
+        navi.navigate("Profile");
       }
     }
   }, [profileState, preferenceState]);
 
-  function Offers() {
-    return (
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Tab.Screen name="Mapa" component={Map} />
-        <Tab.Screen name="Lista" component={ListView} />
-      </Tab.Navigator>
-    );
-  }
+  
 
   return (
     <Categories.Navigator>
       <Categories.Screen name="Kategorie" component={CategoriesView} />
-      <Categories.Screen name="ss" component={Offers} />
+      <Categories.Screen name="Oferty" component={OffersView} />
     </Categories.Navigator>
   );
 }
