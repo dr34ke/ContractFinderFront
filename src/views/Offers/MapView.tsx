@@ -126,7 +126,7 @@ function DetailView({ offer, onClose }: Props) {
       </View>
 
       <View style={styles.cardFooter}>
-        <Text style={styles.cardDetails}>5 km away</Text>
+        <Text style={styles.cardDetails}>{`${offer.distanceInKm.toFixed(1)} km`}</Text>
         <Text style={styles.cardDetails}>
           {offer.sugestedSalary} zł{offer.isSalaryPerHour ? `/h` : ``}
         </Text>

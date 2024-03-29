@@ -52,7 +52,7 @@ function SingleRow({ offer }: Props) {
         </Text>
         <Text style={styles.title}>{offer.title}</Text>
         <Text style={styles.underscore}>
-          5 km away
+          {offer.onSite===true?`${offer.distanceInKm.toFixed(1)} km`:"Zdalnie"}
         </Text>
       </View>
       <Text style={styles.ammount}>

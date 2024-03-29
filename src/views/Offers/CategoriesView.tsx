@@ -9,19 +9,59 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NavigatorOffersProps } from "./Offers";
 import { Offer } from "../../models/Offer";
 import useOffers from "../../stores/offersStore";
-
+import * as Location from "expo-location";
+import { Region } from "react-native-maps";
+import UserStore from "../../stores/userStore";
 
 export default function CategoriesView() {
   const [categories, setCategories] = useState<WorkCategory[]>([]);
-  const initOffer = useOffers((s)=>s.initializeOffers)
-  const navigation = useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
-  
+  const initOffer = useOffers((s) => s.initializeOffers);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
+
+  const userPreference = UserStore((s) => s.userPreference);
+  const initUserPreference = UserStore((s) => s.initializeUserPreference);
+
+  const [location, setLocation] = useState<Region>({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return;
+    }
+
+    let loc = await Location.getCurrentPositionAsync({});
+    setLocation({
+      ...location,
+      latitude: loc.coords.latitude,
+      longitude: loc.coords.longitude,
+    });
+  };
+
   useEffect(() => {
-    getCategories();
+    initUserPreference();
+    getLocation();
+    getCategories(
+      location.latitude,
+      location.longitude,
+      userPreference?.workDistance ?? 100
+    );
   }, []);
-  const getCategories = async () => {
+  const getCategories = async (
+    latitude: number,
+    longitude: number,
+    distance: number
+  ) => {
     try {
-      var response = await Get<WorkCategory[]>("/categories", true);
+      var response = await Get<WorkCategory[]>(
+        `/categories?latitude=${latitude}&longitude=${longitude}&distance=${distance}`,
+        true
+      );
       setCategories(response);
     } catch (ex) {
       showMessage({
@@ -33,21 +73,37 @@ export default function CategoriesView() {
     }
   };
 
+  const setCategory = async (
+    _id: string,
+    latitude: number,
+    longitude: number,
+    distance: number
+  ) => {
 
-  const setCategory = async (_id:string) =>{
-    initOffer(_id);
-    navigation.navigate("Oferty")
-  }
+    initOffer(_id, latitude, longitude, distance);
+    navigation.navigate("Oferty");
+  };
 
   return (
     <View style={styles.container}>
       {categories.map((category) => {
         return (
-          <TouchableOpacity style={styles.itemConteiner} key={category.id} onPress={()=>setCategory(category.id)}>
+          <TouchableOpacity
+            style={styles.itemConteiner}
+            key={category.id}
+            onPress={() =>
+              setCategory(
+                category.id,
+                location.latitude,
+                location.longitude,
+                userPreference?.workDistance ?? 100
+              )
+            }
+          >
             <Text style={styles.item}>{category.name}</Text>
             <View style={styles.countContainer}>
               <Text style={styles.item}>{category.offersCount}</Text>
-              <Ionicons name="chevron-forward-outline" style={styles.icon}/>
+              <Ionicons name="chevron-forward-outline" style={styles.icon} />
             </View>
           </TouchableOpacity>
         );
@@ -57,11 +113,11 @@ export default function CategoriesView() {
 }
 
 const styles = StyleSheet.create({
-    icon:{
-        fontSize:22,
-    },
+  icon: {
+    fontSize: 22,
+  },
   countContainer: {
-    flexDirection:"row"
+    flexDirection: "row",
   },
   container: {
     flex: 1,
@@ -73,7 +129,7 @@ const styles = StyleSheet.create({
   },
   itemConteiner: {
     flexDirection: "row",
-    alignItems:"center",
+    alignItems: "center",
     height: 50,
     justifyContent: "space-between",
     borderBottomColor: "black",

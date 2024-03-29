@@ -59,8 +59,8 @@ export default function Offers() {
 
   return (
     <Categories.Navigator>
-      <Categories.Screen name="Kategorie" component={CategoriesView} />
-      <Categories.Screen name="Oferty" component={OffersView} />
+      <Categories.Screen name="Kategorie" component={CategoriesView} options={{headerShown:false}} />
+      <Categories.Screen name="Oferty" component={OffersView} options={{headerShown:false}}/>
     </Categories.Navigator>
   );
 }

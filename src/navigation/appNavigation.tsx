@@ -41,7 +41,7 @@ const Navigator = () => {
         <StatusBar translucent={true} />
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home">
-            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Home" component={Home} options={{title:"Oferty"}}/>
             <Drawer.Screen name="Profile" component={Profile} options={{
               title:"Profil"
             }}/>

@@ -10,5 +10,6 @@ export interface Offer {
   isFromWorker: boolean;
   onSite: boolean;
   coordinates: string[];
+  distanceInKm: number;
   timeStamp: TimeStamp;
 }
