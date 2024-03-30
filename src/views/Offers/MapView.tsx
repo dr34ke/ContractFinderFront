@@ -17,6 +17,10 @@ import { Offer } from "../../models/Offer";
 import useOffers from "../../stores/offersStore";
 import UsersProfileStore from "../../stores/usersProfile";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NavigatorOffersProps } from "./Offers";
+import { StarRatingDisplay } from "react-native-star-rating-widget";
 
 export default function Map() {
   const offers = useOffers((s) => s.offers);
@@ -28,6 +32,8 @@ export default function Map() {
   });
 
   const getUserProfile = UsersProfileStore((u) => u.getProfile);
+
+
 
   useEffect(() => {
     getLocation();
@@ -60,13 +66,13 @@ export default function Map() {
           showsUserLocation
           mapType={Platform.OS == "ios" ? "none" : "standard"}
         >
-          {offers.map((offer) => {
+          {offers.map((offer, key) => {
             {
               offer.onSite;
             }
             return offer.onSite ? (
               <Marker
-                key={offer.id}
+                key={key}
                 coordinate={{
                   latitude: Number(offer.coordinates[0]),
                   longitude: Number(offer.coordinates[1]),
@@ -78,7 +84,7 @@ export default function Map() {
             );
           })}
         </MapView>
-        {selectedOffer && <DetailView offer={selectedOffer} onClose={()=>setSelectedOffer(undefined)}></DetailView>}
+        {selectedOffer && <DetailView offer={selectedOffer} onClose={()=>setSelectedOffer(undefined)} location={location}></DetailView>}
       </View>
     </View>
   );
@@ -86,8 +92,14 @@ export default function Map() {
 interface Props {
   offer: Offer;
   onClose: ()=>void,
+  location:Region
 }
-function DetailView({ offer, onClose }: Props) {
+function DetailView({ offer, onClose, location }: Props) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
+
+  const initOffer = useOffers((s) => s.initializeOffer);
+
   const getUserProfile = UsersProfileStore((u) => u.getProfile);
   const [image, setImage] = useState<string | undefined>(undefined);
   const [user, setUser] = useState<UserProfileDTO | undefined>(undefined);
@@ -99,6 +111,12 @@ function DetailView({ offer, onClose }: Props) {
     };
     download();
   }, [offer]);
+
+
+  async function OpenDetails(offerId:string){
+      await initOffer(offerId, location.latitude, location.longitude);
+      navigation.navigate("Oferta");
+  }
 
   useEffect(() => {
     setImage(`data:image/png;base64,${user?.image}`);
@@ -113,6 +131,7 @@ function DetailView({ offer, onClose }: Props) {
               <Text style={styles.underscore}>
                 {user?.first_name} {user?.last_name}
               </Text>
+              <StarRatingDisplay rating={user?.rating ?? 0} starSize={15} />
               <TouchableOpacity onPress={onClose}>
                 <Ionicons name="close-outline" style={styles.close} />
               </TouchableOpacity>
@@ -122,6 +141,7 @@ function DetailView({ offer, onClose }: Props) {
         </View>
         <View>
           <Text style={styles.underscore}>{offer.description}</Text>
+          <TouchableOpacity onPress={()=>OpenDetails(offer.id)}><Text>Szegóły</Text></TouchableOpacity>
         </View>
       </View>
 
@@ -169,14 +189,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     borderColor: "#c8c8c8",
     borderWidth: 3,
-    width: "84%",
     padding: 10,
     borderRadius: 20,
     marginLeft: "8%",
     marginRight: "8%",
-    marginBottom: "2%",
-    height: "40%",
-    bottom: 0,
+    bottom: 50,
     position: "absolute",
   },
   image: {

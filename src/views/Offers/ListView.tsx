@@ -11,25 +11,65 @@ import {
 import { Offer } from "../../models/Offer";
 import useOffers from "../../stores/offersStore";
 import UsersProfileStore from "../../stores/usersProfile";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NavigatorOffersProps } from "./Offers";
+import { Region } from "react-native-maps";
+import * as Location from "expo-location";
 
 export default function ListView() {
   const offers = useOffers((s) => s.offers);
 
+
+  const [location, setLocation] = useState<Region>({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+  useEffect(() => {
+    getLocation();
+  }, []);
+
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return;
+    }
+
+    let loc = await Location.getCurrentPositionAsync({});
+    setLocation({
+      ...location,
+      latitude: loc.coords.latitude,
+      longitude: loc.coords.longitude,
+    });
+  };
+
   return (
     <ScrollView>
-      {offers.map((offer) => {
-        return <SingleRow offer={offer} key={offer.id} />;
+      {offers.map((offer, key) => {
+        return <SingleRow offer={offer} key={key} location={location}/>;
       })}
     </ScrollView>
   );
 }
 interface Props {
   offer: Offer;
+  location: Region
 }
-function SingleRow({ offer }: Props) {
+function SingleRow({ offer, location }: Props) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
+
+  const initOffer = useOffers((s) => s.initializeOffer);
   const getUserProfile = UsersProfileStore((u) => u.getProfile);
   const [image, setImage] = useState<string | undefined>(undefined);
   const [user, setUser] = useState<UserProfileDTO | undefined>(undefined);
+
+  async function OpenDetails(){
+    await initOffer(offer.id, location.latitude, location.longitude);
+    navigation.navigate("Oferta");
+}
 
   useEffect(() => {
     const download = async () => {
@@ -44,7 +84,7 @@ function SingleRow({ offer }: Props) {
   }, [user]);
 
   return (
-    <TouchableOpacity style={styles.tile} key={offer.id} onPress={() => {}}>
+    <TouchableOpacity style={styles.tile} onPress={OpenDetails}>
       <Image source={{ uri: image }} style={styles.image} />
       <View style={styles.rowDetailsContainer}>
         <Text style={styles.underscore}>

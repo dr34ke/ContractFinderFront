@@ -10,9 +10,14 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import CategoriesView from "./CategoriesView";
 import OffersView from "./OffersView";
+import OfferView from "./OfferView";
+import UserProfileView from "../User/UserProfile";
 
 export type NavigatorOffersProps = {
   Oferty: any;
+  Kategorie:any,
+  Oferta: any,
+  Profil:any,
 };
 
 export default function Offers() {
@@ -61,6 +66,8 @@ export default function Offers() {
     <Categories.Navigator>
       <Categories.Screen name="Kategorie" component={CategoriesView} options={{headerShown:false}} />
       <Categories.Screen name="Oferty" component={OffersView} options={{headerShown:false}}/>
+      <Categories.Screen name="Oferta" component={OfferView} options={{headerShown:false}}/>
+      <Categories.Screen name="Profil" component={UserProfileView} options={{headerShown:false}}/>
     </Categories.Navigator>
   );
 }

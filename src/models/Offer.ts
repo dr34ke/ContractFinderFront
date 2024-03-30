@@ -12,4 +12,5 @@ export interface Offer {
   coordinates: string[];
   distanceInKm: number;
   timeStamp: TimeStamp;
+  usersApplications: UserApplication[]|undefined
 }

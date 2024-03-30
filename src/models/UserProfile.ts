@@ -5,5 +5,6 @@ interface UserProfileDTO {
     email?: string | null;
     phone?: string | null;
     description?: string | null;
-    image?: string | null;
+    image?: string | null;  
+    rating?:number;
   }

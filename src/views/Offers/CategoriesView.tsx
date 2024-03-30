@@ -15,7 +15,8 @@ import UserStore from "../../stores/userStore";
 
 export default function CategoriesView() {
   const [categories, setCategories] = useState<WorkCategory[]>([]);
-  const initOffer = useOffers((s) => s.initializeOffers);
+  const initOffers = useOffers((s) => s.initializeOffers);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
 
@@ -43,14 +44,21 @@ export default function CategoriesView() {
     });
   };
 
+  useEffect(()=>{
+    if(userPreference!==undefined && location!==undefined)
+      getCategories(
+        location.latitude,
+        location.longitude,
+        userPreference?.workDistance ?? 100
+      );
+  },[location,userPreference])
+
   useEffect(() => {
-    initUserPreference();
-    getLocation();
-    getCategories(
-      location.latitude,
-      location.longitude,
-      userPreference?.workDistance ?? 100
-    );
+    const setData= async () =>{
+      await initUserPreference();
+      await getLocation();
+    }
+    setData();
   }, []);
   const getCategories = async (
     latitude: number,
@@ -60,7 +68,7 @@ export default function CategoriesView() {
     try {
       var response = await Get<WorkCategory[]>(
         `/categories?latitude=${latitude}&longitude=${longitude}&distance=${distance}`,
-        true
+        true 
       );
       setCategories(response);
     } catch (ex) {
@@ -80,7 +88,7 @@ export default function CategoriesView() {
     distance: number
   ) => {
 
-    initOffer(_id, latitude, longitude, distance);
+    await initOffers(_id, latitude, longitude, distance);
     navigation.navigate("Oferty");
   };
 
