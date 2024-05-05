@@ -7,13 +7,12 @@ import {
   StyleSheet,
   Platform,
   Dimensions,
-  PermissionsAndroid,
   TouchableOpacity,
 } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-import { Offer } from "../../models/Offer";
+import { OfferDTO } from "../../models/OfferDTO";
 import useOffers from "../../stores/offersStore";
 import UsersProfileStore from "../../stores/usersProfile";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -53,7 +52,7 @@ export default function Map() {
     });
   };
 
-  const [selectedOffer, setSelectedOffer] = useState<Offer | undefined>(
+  const [selectedOffer, setSelectedOffer] = useState<OfferDTO | undefined>(
     undefined
   );
 
@@ -90,7 +89,7 @@ export default function Map() {
   );
 }
 interface Props {
-  offer: Offer;
+  offer: OfferDTO;
   onClose: ()=>void,
   location:Region
 }

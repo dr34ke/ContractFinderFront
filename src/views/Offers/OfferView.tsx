@@ -18,6 +18,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NavigatorOffersProps } from "./Offers";
 
 function OfferView() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<NavigatorOffersProps>>();
   const offer = useOffers((s) => s.offer);
 
   const getUserProfile = UsersProfileStore((u) => u.getProfile);
@@ -35,6 +37,11 @@ function OfferView() {
   useEffect(() => {
     setImage(`data:image/png;base64,${user?.image}`);
   }, [user]);
+
+console.log(offer?.id)
+  async function Apply(){
+    navigation.navigate("Aplikuj");
+}
 
   return (
     <ScrollView>
@@ -67,7 +74,7 @@ function OfferView() {
             {offer?.sugestedSalary} zł{offer?.isSalaryPerHour ? `/h` : ``}
           </Text>
         </View>
-        <OwnButton onPress={() => {}} title={"Aplikuj"} />
+        <OwnButton onPress={Apply} title={"Aplikuj"} />
         <View>
           {offer?.usersApplications?.map((item, key) => {
             return <UserApplication application={item} key={key} />;
@@ -188,7 +195,7 @@ const styles = StyleSheet.create({
   },
   detailView: {
     flex: 1,
-    padding: 10,
+    padding: 5,
     marginLeft: "2%",
     marginRight: "2%",
     marginBottom: "2%",

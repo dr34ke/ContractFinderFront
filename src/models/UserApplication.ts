@@ -1,5 +1,5 @@
 interface UserApplication{
-    id: string,
+    id?: string,
     userId: string,
     offerId:string,
     salaryOffer: number,

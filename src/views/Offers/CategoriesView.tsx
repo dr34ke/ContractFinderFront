@@ -7,11 +7,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NavigatorOffersProps } from "./Offers";
-import { Offer } from "../../models/Offer";
+import { OfferDTO } from "../../models/OfferDTO";
 import useOffers from "../../stores/offersStore";
 import * as Location from "expo-location";
 import { Region } from "react-native-maps";
 import UserStore from "../../stores/userStore";
+import OwnButton from "../../components/ownButton";
 
 export default function CategoriesView() {
   const [categories, setCategories] = useState<WorkCategory[]>([]);
@@ -44,20 +45,20 @@ export default function CategoriesView() {
     });
   };
 
-  useEffect(()=>{
-    if(userPreference!==undefined && location!==undefined)
+  useEffect(() => {
+    if (userPreference !== undefined && location !== undefined)
       getCategories(
         location.latitude,
         location.longitude,
         userPreference?.workDistance ?? 100
       );
-  },[location,userPreference])
+  }, [location, userPreference]);
 
   useEffect(() => {
-    const setData= async () =>{
+    const setData = async () => {
       await initUserPreference();
       await getLocation();
-    }
+    };
     setData();
   }, []);
   const getCategories = async (
@@ -68,7 +69,7 @@ export default function CategoriesView() {
     try {
       var response = await Get<WorkCategory[]>(
         `/categories?latitude=${latitude}&longitude=${longitude}&distance=${distance}`,
-        true 
+        true
       );
       setCategories(response);
     } catch (ex) {
@@ -87,35 +88,41 @@ export default function CategoriesView() {
     longitude: number,
     distance: number
   ) => {
-
     await initOffers(_id, latitude, longitude, distance);
     navigation.navigate("Oferty");
   };
 
+  const addOffer=()=>{
+    navigation.navigate("Dodaj");
+  }
+
   return (
-    <View style={styles.container}>
-      {categories.map((category) => {
-        return (
-          <TouchableOpacity
-            style={styles.itemConteiner}
-            key={category.id}
-            onPress={() =>
-              setCategory(
-                category.id,
-                location.latitude,
-                location.longitude,
-                userPreference?.workDistance ?? 100
-              )
-            }
-          >
-            <Text style={styles.item}>{category.name}</Text>
-            <View style={styles.countContainer}>
-              <Text style={styles.item}>{category.offersCount}</Text>
-              <Ionicons name="chevron-forward-outline" style={styles.icon} />
-            </View>
-          </TouchableOpacity>
-        );
-      })}
+    <View style={{height:"100%"}}>
+      <OwnButton title="Dodaj oferte" onPress={addOffer} />
+      <View style={styles.container}>
+        {categories.map((category) => {
+          return (
+            <TouchableOpacity
+              style={styles.itemConteiner}
+              key={category.id}
+              onPress={() =>
+                setCategory(
+                  category.id,
+                  location.latitude,
+                  location.longitude,
+                  userPreference?.workDistance ?? 100
+                )
+              }
+            >
+              <Text style={styles.item}>{category.name}</Text>
+              <View style={styles.countContainer}>
+                <Text style={styles.item}>{category.offersCount}</Text>
+                <Ionicons name="chevron-forward-outline" style={styles.icon} />
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 15,
     paddingLeft: 15,
+    height:"100%",
   },
   item: {
     fontSize: 17,

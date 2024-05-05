@@ -8,7 +8,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import { Offer } from "../../models/Offer";
+import { OfferDTO } from "../../models/OfferDTO";
 import useOffers from "../../stores/offersStore";
 import UsersProfileStore from "../../stores/usersProfile";
 import { useNavigation } from "@react-navigation/native";
@@ -54,7 +54,7 @@ export default function ListView() {
   );
 }
 interface Props {
-  offer: Offer;
+  offer: OfferDTO;
   location: Region
 }
 function SingleRow({ offer, location }: Props) {

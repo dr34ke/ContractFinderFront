@@ -1,16 +1,14 @@
-export interface Offer {
-  id: string;
-  userId :string;
-  categoryId: string;
-  title: string;
-  description: string;
-  sugestedSalary: number;
-  isSalaryPerHour: boolean;
-  isRepetetive: boolean;
-  isFromWorker: boolean;
-  onSite: boolean;
-  coordinates: string[];
-  distanceInKm: number;
-  timeStamp: TimeStamp;
-  usersApplications: UserApplication[]|undefined
-}
+export interface Offer{
+    id: string;
+    userId :string;
+    categoryId: string;
+    title: string;
+    description: string;
+    sugestedSalary: number;
+    isSalaryPerHour: boolean;
+    isRepetetive: boolean;
+    isFromWorker: boolean;
+    onSite: boolean;
+    coordinates?: number[] | null;
+  }
+  

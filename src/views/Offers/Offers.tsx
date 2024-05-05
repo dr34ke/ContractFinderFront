@@ -12,12 +12,16 @@ import CategoriesView from "./CategoriesView";
 import OffersView from "./OffersView";
 import OfferView from "./OfferView";
 import UserProfileView from "../User/UserProfile";
+import UserApply from "./UserApply";
+import AddNewOffer from "./AddNewOffer";
 
 export type NavigatorOffersProps = {
   Oferty: any;
   Kategorie:any,
   Oferta: any,
   Profil:any,
+  Aplikuj:any,
+  Dodaj: any,
 };
 
 export default function Offers() {
@@ -68,6 +72,8 @@ export default function Offers() {
       <Categories.Screen name="Oferty" component={OffersView} options={{headerShown:false}}/>
       <Categories.Screen name="Oferta" component={OfferView} options={{headerShown:false}}/>
       <Categories.Screen name="Profil" component={UserProfileView} options={{headerShown:false}}/>
+      <Categories.Screen name="Aplikuj" component={UserApply} options={{headerShown:false}}/>
+      <Categories.Screen name="Dodaj" component={AddNewOffer} options={{headerShown:false}}/>
     </Categories.Navigator>
   );
 }

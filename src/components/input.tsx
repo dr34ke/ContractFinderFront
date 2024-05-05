@@ -15,7 +15,8 @@ interface Props {
   placeHolder: string;
   kbType?: KeyboardTypeOptions;
   secure?: boolean;
-  iconName:string
+  iconName?:string|undefined,
+  numberOfLines?: number|undefined,
 }
 
 export default function Input({
@@ -24,14 +25,16 @@ export default function Input({
   placeHolder,
   kbType = undefined,
   secure = false,
-  iconName
+  iconName = undefined,
+  numberOfLines=1,
 }: Props) {
   return (
     <View style={styles.searchSection}>
-      <Ionicons name={iconName} style={styles.searchIcon}/>
+      {iconName && <Ionicons name={iconName} style={styles.searchIcon}/>}
       <TextInput
         style={styles.input}
         onChangeText={onChange}
+        numberOfLines={numberOfLines}
         value={value}
         placeholder={placeHolder}
         keyboardType={kbType}

@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Pressable,
 } from "react-native";
-import Input from "../components/input";
+import Input from "../components/Input";
 import { Post } from "../api/apiService";
 import { useRef, useState } from "react";
 import FlashMessage, { showMessage } from "react-native-flash-message";

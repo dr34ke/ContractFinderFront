@@ -1,0 +1,1 @@
+C:\repo\go_workspace\src\github.com\dr34ke\ContractFinderFront\android\app\build\intermediates\cxx\Debug\4p1x6jt1\obj\arm64-v8a

@@ -4,28 +4,34 @@ import { StyleSheet, View } from "react-native";
 import Dropdown from "react-native-input-select";
 
 interface Props {
-  description: string;
+  description?: string|undefined;
   onChange: (value: any) => void;
   value?: string;
-  options: { label: string; value: string }[];
+  options?: { label: string; value: string }[] |undefined;
 }
 
 export default function OwnSelect({
   description,
   onChange,
   value,
-  options,
+  options
 }: Props) {
   return (
     <View style={styles.main}>
       <Dropdown
         label={description}
         placeholder="wybierz..."
-        options={options}
+        options={options??[]}
         selectedValue={value}
         onValueChange={(value: string) => onChange(value)}
         primaryColor={"black"}
         labelStyle={styles.label}
+        dropdownStyle={{
+          paddingVertical: 5,
+          paddingHorizontal: 5,
+          minHeight: 45,
+        }}
+        dropdownIconStyle={{ top: 17, right: 10 }}
       />
     </View>
   );
@@ -40,4 +46,5 @@ const styles = StyleSheet.create({
     paddingLeft:10,
     paddingRight:10,
   }
+  
 });

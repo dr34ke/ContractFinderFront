@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import Input from "../components/input";
+import Input from "../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { showMessage } from "react-native-flash-message";
